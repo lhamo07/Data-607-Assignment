@@ -7,7 +7,7 @@ editor: visual
 
 ## Introduction
 
-The objective of this assignment is to implement a Global Baseline Estimate recommendation system in R using the last assignment's movie rating data that I'd collected and provided spreadsheet [Movie Ratings XLSX](https://brightspace.cuny.edu/content/enforced/1344367-SPS01_DATA_607_1269_1_34036/MovieRatings.xlsx?ou=1344367) . There are two types of recommendation system algorithm, personalized and non personalized.
+The objective of this assignment is to implement a Global Baseline Estimate recommendation system in R using the last assignment's movie rating data that I'd collected and provided spreadsheet algorithm [Movie Ratings XLSX](https://brightspace.cuny.edu/content/enforced/1344367-SPS01_DATA_607_1269_1_34036/MovieRatings.xlsx?ou=1344367) . There are two types of recommendation system algorithm, personalized and non personalized.
 
 In this assignment, we are going to use "Global Baseline Estimate".
 
@@ -25,14 +25,96 @@ Global Baseline Estimate (often called a baseline predictor) is a non-personaliz
 
 First, I will reformat the TV episode ratings data to a format similar to the provided movie ratings spreadsheet.
 
-Then, I will calculate each user's average TV episode rating in R and store the results in a user_avg column. I will also calculate the sum of the user averages.
+Then, I will calculate each user's average TV episode rating in R and store the results in a user_avg column. I will also calculate the global mean.
 
-Next, I will calculate the average rating for each TV episode in R and store the results in a movie_avg column at the end of the records.
+Next, I will calculate the average rating for each TV episode in R and store the results in a episode_avg column at the end of the records.
 
-Then, I will identify any TV episode that is missing a rating for a particular user. For each missing rating, I will use the Global Baseline Estimate formula to calculate a predicted rating based on the available user ratings, episode ratings, and overall average rating. Then I'll make sure the calculations are valid and reproducible.\
+Then, I will identify any TV episode that is missing a rating for a particular user. For each missing rating, I will use the Global Baseline Estimate formula to calculate a predicted rating based on the available user ratings, episode ratings, and overall average rating. Then I'll make sure the calculations are valid and reproducible.
 
 ## Anticipated Challenges
 
 Since I only have five users rating six TV episodes, there is a chance that some episodes will not be rated by certain users. This may result in missing ratings and could potentially introduce bias into the analysis. The small number of users may also make the average ratings less representative.
 
-## 
+## Code
+
+```{r}
+library(tidyverse)
+```
+
+### Import data set
+
+```{r}
+url<-"C:/Users/tenlh/Downloads/tv_episodes_ratings_dataset.csv"
+
+tv_episode_df<-read.csv(file = url)
+```
+
+### Calculate user average
+
+```{r}
+
+tv_episode_df<-tv_episode_df %>%
+  group_by(user)%>%
+  mutate(user_avg=mean(rating,na.rm=TRUE))
+tv_episode_df
+```
+
+Added a "user_avg" column that shows each user's average rating for the episodes they rated.
+
+### Calculate global mean
+
+```{r}
+global_mean <- tv_episode_df %>%
+  ungroup() %>%
+  summarise(global_mean = mean(rating, na.rm = TRUE))%>%
+  pull(global_mean)
+global_mean
+```
+
+calculated the global mean, which represents the overall average rating across all TV episodes and users. Global Mean is 4.35 \### Calculate user bias
+
+```{r}
+tv_episode_df <- tv_episode_df %>%
+  mutate(user_bias= user_avg - global_mean)
+tv_episode_df
+```
+
+### Calculate Episode average and item bias
+
+```{r}
+
+episode_average_df<-tv_episode_df %>%
+  group_by(tv_episodes) %>%
+  summarise(
+    episode_avg = mean(rating, na.rm = TRUE)
+  )%>%
+      mutate(item_bias = episode_avg - global_mean)
+
+episode_average_df
+```
+
+#### how Jose rate Squid Game?
+
+```{r}
+squid_game_item_bias <- episode_average_df %>%
+  filter(tv_episodes == "Squid Game") %>%
+  pull(item_bias)
+squid_game_item_bias
+```
+Squid Game's rating relative to average is 0.4 
+```{r}
+jose_squid_game_user_bias <- tv_episode_df %>%
+  filter(user == "Jose" & tv_episodes=="Squid Game") %>%
+  pull(user_bias)
+jose_squid_game_user_bias
+```
+Jose's rating relative to average is -0.1
+
+### Calculate global baseline estimate
+
+```{r}
+    global_baseline_estimate<-global_mean+squid_game_item_bias+jose_squid_game_user_bias
+global_baseline_estimate
+```
+## Conclusion 
+Based on the global baseline estimate recommendation system, Jose’s 4.65 rating for Squid Game stands out as a must-watch and highly recommended TV series.

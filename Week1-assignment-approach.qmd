@@ -1,0 +1,16 @@
+---
+title: "Week1-Assignment-approach"
+author: "Tenzin Thakuri"
+format: html
+editor: visual
+---
+
+## Introduction
+
+I'm planning to used kaggle's Health and lifestyle dataset for my first week's assignment.i.e. ,<https://www.kaggle.com/datasets/mahdimashayekhi/health-and-lifestyle-dataset?select=health_activity_data.csv> . Because I am interested in finding insights from health related data, I want to explore whether males or females are more health-conscious. Additionally, this dataset allows for numerous comparison between male and female health and lifestyle factors across a wide range of age groups. I plan to find these insights by writing R code to analyze the data and visualize the outputs using chart.
+
+Data challenges that I anticipated are:
+
+1.Data Cleaning: Finding missing or null values.
+
+2\. Finding relationship between different column variables in the dataset.
