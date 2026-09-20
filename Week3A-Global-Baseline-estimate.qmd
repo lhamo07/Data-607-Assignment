@@ -44,7 +44,7 @@ library(tidyverse)
 ### Import data set
 
 ```{r}
-url<-"C:/Users/tenlh/Downloads/tv_episodes_ratings_dataset.csv"
+url<-"https://raw.githubusercontent.com/lhamo07/Data-607-Assignment/refs/heads/Week3A-Global-Baseline-Estimate/tv_episodes_ratings_dataset.csv"
 
 tv_episode_df<-read.csv(file = url)
 ```
