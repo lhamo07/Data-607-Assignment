@@ -148,4 +148,27 @@ This dataset helped me transform the baby names dataset from wide format to tidy
 
 Anthropic. (2026). Claude Sonnet 5.5 \[Large language model\]. https://claude.ai. Accessed October 11, https://claude.ai/share/0b74850c-e792-459a-899a-89eeb306cae7
 
+## ---------------------------3rd Dataset---------------------------
 
+## 2.Dataset Selection
+
+Labor market dataset: <https://www.bls.gov/news.release/archives/laus_04082026.htm> Obtained from 5A discussion post contributed by Zaina Hassan.
+
+## Data structure before tidying
+
+Dates and measurements are spread across multiple columns and levels of column headings rather than each variable having its own individual column. For example, unemployment information for different months and years appears across several columns.
+
+## 3.Data Preparation
+
+### 3.1 Raw Data Construction
+
+```{r}
+library(readr)
+library(dplyr)
+library(tidyr)
+library(naniar)
+library(ggplot2)
+
+row_df<-read_csv("D:/Data-607/labour_row_dataset.csv")
+row_df
+```

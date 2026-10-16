@@ -38,7 +38,7 @@ Note: Publishing will require making your HTML and JSON files publicly accessibl
 
 I have selected the following three books on the subject of "Contemporary Fiction Novels"
 
-![](images/books-table.png)
+![![](images/clipboard-301192639.png)](images/books-table.png)
 
 I'm going to create the books.html and books.json file in visual studio code.
 
@@ -46,8 +46,33 @@ In the books.html file, I will create a table and insert all the data.
 
 In the books.json file, I will create an array objects containing the same information.
 
-I'm going to use xml2 package to load an HTML file into R. To load json file into R, I'm going to use jsonlite package.
+I'm going to use rvest package to load an HTML file into R. To load json file into R, I'm going to use jsonlite package.
 
 ## Anticipated challenge
 
 This is my first time loading html file and json file into R. So may face challenges in data formats.
+
+## Code
+
+```{r}
+
+
+
+library(rvest)
+library(jsonlite)
+
+
+# Provide the path to your local HTML file
+local_html <- "D:/Data-607/Week7-html-json/books.html"
+
+# Read and convert exactly the same way
+my_data_frame <- read_html(local_html) %>% 
+  html_node("table") %>% 
+  html_table()
+
+my_data_frame
+```
+```{r}
+json_df<-fromJSON("D:/Data-607/Week7-html-json/books.json")
+json_df
+```
